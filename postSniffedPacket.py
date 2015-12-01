@@ -23,7 +23,7 @@ else:
 	filter = ""
 
 ## define POST parameters
-url = "http://localhost:3000/api/packets"
+url = "http://localhost:4000/api/packets"
 userToken = ""
 
 # Start sniffing some packets

@@ -2,7 +2,67 @@ from scapy.all import *
 import requests
 import json
 from datetime import datetime
+import pprint
+import os
 
+flowtable=dict()
+count=0
+def get_id(p,sport,dport):
+	global flowtable, count
+	print "%d %d" %(sport,dport)
+	id=0
+	direction="unknown"
+	name='NA'
+	print "get_id 1"
+	if (count%1000) == 0: 
+		if flowtable:
+			print flowtable
+	count=count+1 
+	print "get_id 2"
+
+	if sport == 1514:
+		#need to lookup what was the last match for port and assign it to id
+		#usally f5 keeps a connection open for 30-60 secs before 
+		#closing and resuing the connection
+		#however considering we will not get a noid packet before the id packet, we should be
+		#mostly able to find a good mactch in one shot
+		
+		#Match dst port to already existing 
+		direction="rcvd"
+		try:
+			id=flowtable[str(dport)]['id']
+			name=flowtable[str(dport)]['name']
+		except:
+			print flowtable
+			print "not able to find a corresponding matching pattern"
+		
+	else:
+		direction="sent"
+		p=str(p)
+		p=p.split('Raw')[0].split("Padding")[0]
+		print "sending packet .... %s" % (p)
+		os._exit
+		for s in p.split('!'): 
+			print s
+			if s.isdigit():
+				id=int(s)
+				print id
+				try:
+					if s not in flowtable: True
+				except:
+					print "assinging" 
+					flowtable[str(sport)]=dict()
+					print "assgned.." 
+
+				flowtable[str(sport)]['id']=id
+				#this is a overkill to call the assignment all the time
+				#this is only to counter a deleted/modified agent id
+				name=subprocess.Popen("/var/ossec/bin/agent_control -i %d | grep Name| tr -d ' '|  awk -F':' '{print $2}'| sed  -e  /^$/d " %(id), 
+							shell=True, stdout=subprocess.PIPE).stdout.readline().strip()
+				flowtable[str(sport)]['name']=name
+				break
+	return id,name,direction
+	
 def cleanPayload(p):
 	p = str(p)
 	# Clean up packet payload from scapy output
@@ -80,6 +140,9 @@ def uploadPacket(url, userToken):
 				dstIP = "<unknown>"
 				payload = cleanPayload(rawPacket[0].show)
 				
+			print "before.."
+			id,name,direction=get_id(rawPacket[0].show, srcPort, dstPort)
+			print "after .."
 			packet = {'owner': userToken,\
 					"timestamp": str(datetime.now())[:-2],\
 					"srcIP": srcIP,\
@@ -92,8 +155,13 @@ def uploadPacket(url, userToken):
 					"L4protocol": L4protocol,\
 					"srcPort": srcPort,\
 					"dstPort": dstPort,\
-					"payload": cleanPayload(rawPacket[0].show)\
+					"payload": cleanPayload(rawPacket[0].show),\
+					"id" : id,\
+					"name": name,\
+					"direction": direction\
 					}
+			pp = pprint.PrettyPrinter(indent=4)
+			pp.pprint(packet)
 			# define headers for API POST
 			headers = {'content-type': 'application/json'}
 			# attempt to jsonify the packet and send to API, if can't jsonify the packet, re-write the payload(this is where json issues would exist)
@@ -106,6 +174,7 @@ def uploadPacket(url, userToken):
 			return "Packet Uploaded: " + str(packet["timestamp"]) + " ; " + str(packet["srcIP"]) + " ==> " + str(packet["dstIP"] + "; " + str(packet["L4protocol"]))
 		except:
 			# Debug: if packet error, print out the packet to see what failed
+			#if rawPacket[0].show: 
 			print cleanPayload(rawPacket[0].show)
 			return "Packet Issue, review packet printout for problem"
 	
