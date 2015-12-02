@@ -1,0 +1,23 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+argparse	postSniffedPacket.py	/^import argparse$/;"	i
+args	postSniffedPacket.py	/^args = parser.parse_args()$/;"	v
+cleanPayload	meteorshark.py	/^def cleanPayload(p):$/;"	f
+count	postSniffedPacket.py	/^		count = 0$/;"	v
+count	postSniffedPacket.py	/^		count = int(args.count)$/;"	v
+count	postSniffedPacket.py	/^	count = 0$/;"	v
+datetime	meteorshark.py	/^from datetime import datetime$/;"	i
+filter	postSniffedPacket.py	/^	filter = ""$/;"	v
+filter	postSniffedPacket.py	/^	filter = args.filter$/;"	v
+json	meteorshark.py	/^import json$/;"	i
+parseAndPost	meteorshark.py	/^	def parseAndPost(rawPacket):$/;"	f	function:uploadPacket
+parser	postSniffedPacket.py	/^parser = argparse.ArgumentParser()$/;"	v
+requests	meteorshark.py	/^import requests$/;"	i
+uploadPacket	meteorshark.py	/^def uploadPacket(url, userToken):$/;"	f
+uploadPacket	postSniffedPacket.py	/^from meteorshark import uploadPacket$/;"	i
+url	postSniffedPacket.py	/^url = "http:\/\/localhost:4000\/api\/packets"$/;"	v
+userToken	postSniffedPacket.py	/^userToken = ""$/;"	v
