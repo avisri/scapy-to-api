@@ -72,18 +72,23 @@ def flattenDict(d, result=None):
 
 header=''
 jd=''
-for s in sys.stdin:
-    start = s.find('{')
-    if s[len(s) -2] == '}':
-        d=s[start:]
-        d=d.strip()
-        jd=json.loads(d)
-        jd=flattenDict(jd)
-        header= s[0:start] 
-        #print  ("%s %s") % (header,json.dumps(jd))
-        result=merge(parse_header(header),jd)
-        #print "{0}".format(json.dumps(result)) 
-	post("nix",result)
-    else:
-        print s
+#from local
+import tail
+p, f = tail.tail("/var/ossec/logs/archives/archives.log")
+#for s in sys.stdin:
+while True:
+    if p.poll(1):
+        s=f.stdout.readline()
+        start = s.find('{')
+        if s[len(s) -2] == '}':
+            d=s[start:]
+            d=d.strip()
+            jd=json.loads(d)
+            jd=flattenDict(jd)
+            header= s[0:start] 
+            #print  ("%s %s") % (header,json.dumps(jd))
+            result=merge(parse_header(header),jd)
+            post("nix",result)
+        else:
+            print s
 
