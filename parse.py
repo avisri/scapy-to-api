@@ -24,13 +24,6 @@ def post(evtype,data):
 	del exc_info
 	pass
    
-"""
-2015 Dec 02 00:00:01 (trither-wsl2) any->/var/log/auth.log Dec  1 16:00:01 trither-wsl2 CRON[1053]: pam_unix(cron:session): session opened for user root by (uid=0)
-2015 Dec 02 00:00:01 (edcripps-wsl) any->/var/log/auth.log Dec  1 16:00:01 edcripps-wsl CRON[6989]: pam_unix(cron:session): session opened for user root by (uid=0)
-2015 Dec 02 00:00:01 (cnaylor-ltmr) any->/var/log/osqueryd.results.log {"name":"procs_on_internet","hostIdentifier":"cnaylor-ltmr.internal.salesforce.com","calendarTime":"Wed Dec  2 00:00:01 2015 UTC","unixTime":"1449014401","columns":{"family":"2","local_address":"10.33.14.161","local_port":"57576","name":"Google Chrome","pid":"881","protocol":"6","remote_address":"216.58.217.142","remote_port":"443"},"action":"added"}
-2015 Dec 02 00:00:01 (cnaylor-ltmr) any->/var/log/osqueryd.results.log {"name":"procs_on_internet","hostIdentifier":"cnaylor-ltmr.internal.salesforce.com","calendarTime":"Wed Dec  2 00:00:01 2015 UTC","unixTime":"1449014401","columns":{"family":"2","local_address":"10.33.14.161","local_port":"57650","name":"Google Chrome","pid":"881","protocol":"6","remote_address":"38.127.167.50","remote_port":"443"},"action":"added"}
-2015 Dec 02 00:00:01 (cnaylor-ltmr) any->/var/log/osqueryd.results.log {"name":"procs_on_internet","hostIdentifier":"cnaylor-ltmr.internal.salesforce.com","calendarTime":"Wed Dec  2 00:00:01 2015 UTC","unixTime":"1449014401","columns":{"family":"2","local_address":"10.33.14.161","local_port":"57577","name":"Google Chrome","pid":"881","protocol":"6","remote_address":"216.58.217.142","remote_port":"443"},"action":"added"}
-"""
 def parse_header(header):
     parts=header.split()
     server_time="{0} {1} {2} {3}".format(parts[0],parts[1],parts[2],parts[3])
